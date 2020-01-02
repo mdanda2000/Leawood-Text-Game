@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 
 
-//TO DO: Continue working on key logic, which is stubbed out below
+//TO DO: Add the logic to process keys, which is stubbed out below
 //TO DO: Research fight algorithms, integrate one into monster logic
 //TO DO: Create a main menu for starting, saving, and loading games
 
@@ -21,16 +21,17 @@ public class TextGame {
 	Scanner myScanner = new Scanner(System.in);	
 	String userAction;
 	
-	ArrayList<String> keysFound = new ArrayList<String>();  //Stores the keys, which identify the nodes the user can pass through
-		
+	int userLocation;   		
 	int monsterLocation;
 	int monsterMovement; //The direction the monster wants to move, which may or may not be plausible
 	Random random = new Random();
 	boolean keepPlaying;	
 	
 	String[][] map = new String[99][6];
-	int userLocation;   
+	String[][] keyMap = new String[99][3];
 	
+	ArrayList<String> keysFound = new ArrayList<String>();  //Stores the keys, which identify the nodes the user can pass through
+		
 	final int northNode = 0;       //The value in map[userLocation][northNode] identifies the node to the north
 	final int southNode = 1;       //The value in map[userLocation][southNode] identifies the node to the south
 	final int eastNode = 2;        //The value in map[userLocation][eastNode] identifies the node to the east
@@ -46,6 +47,8 @@ public class TextGame {
 												
 		leawood.playerSetUp(); 			
 		leawood.mapSetUp();
+		
+		leawood.keySetUp();
 					
 		leawood.printStatus();
 		leawood.playGame();
@@ -61,7 +64,7 @@ public class TextGame {
 		keepPlaying = true; 
 		
 		System.out.println("Welcome to my text game.");
-		System.out.println("Are you ready to begin? (y,n): ");
+		System.out.println("Press ENTER to begin.");
 		myScanner.nextLine();
 		
 	}
@@ -97,10 +100,32 @@ public class TextGame {
 		
 		// Same as mapSetUp() except it identifies which nodes contain keys. 
 		
-		// TO DO: Figure out how to store keys in nodes. Possibly create a new text file called LeawoodHouseKeyLocations.txt
-		// Syntax of new file:
-		// nodeKeyResides, nodeKeyOpens, isKeyAvailable (true, false)
-		// Doors in Leawood map: 2, 21, 23, 24, 28, 30, 34 
+		// Syntax of KeyLocations file:
+		// nodeKeyOpens, nodeKeyResides, isKeyAvailable (true/false),
+		
+		try{
+			File keyFile = new File ("C:\\Users\\Matt\\eclipse-workspace\\Matts Text Game\\src\\mattsTextGame\\LeawoodHouseKeyLocations.txt");
+			BufferedReader k = new BufferedReader(new FileReader(keyFile));
+			String readline = "";
+			int n=3; //number of parameters in each row, there's probably a way to use tokenizer to get it from readline 
+			int nodeRow=0; //node number, also the row number
+									
+			while ((readline=k.readLine())!= null){
+				//System.out.println(readline);  //For debugging purposes
+				StringTokenizer tokenizer = new StringTokenizer(readline, ",");				
+				
+				for (int i=0;i<n;i++){					
+					String token = tokenizer.nextToken();					
+					keyMap[nodeRow][i] = token;  //Populate array					
+				}
+				System.out.println("Key for node " + keyMap[nodeRow][0] + " is in node " + keyMap[nodeRow][1]); //For debugging purposes
+				nodeRow++;						
+			}		
+			k.close();
+		}catch (IOException e){
+			e.printStackTrace();
+		}		
+		
 		
 	}
 	
