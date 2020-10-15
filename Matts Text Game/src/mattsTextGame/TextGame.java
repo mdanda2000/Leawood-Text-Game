@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 
-//TO DO: Clean up output text. Possibly hide the dog until its near?
+//TO DO: Hide the monster until its near
+//TO DO: Only move the monster when you move or look around. Not when you run into a wall
 //TO DO: Research fight algorithms, integrate one into monster logic
 //TO DO: Create a main menu for starting, saving, and loading games
 
@@ -64,7 +65,7 @@ public class TextGame {
 		userLocation = 1;    // Set the player's initial location
 		keysFound.add(2);  //Give the player the key to the front door of the house
 		
-		monsterLocation = 9; //Set the monster's initial location
+		monsterLocation = 9; //Set the monster's initial location (node #)
 		
 		keepPlaying = true; 
 		
@@ -94,7 +95,7 @@ public class TextGame {
 				for (int i=0; i<mapFileTokensPerRow ;i++){					
 					String token = tokenizer.nextToken();					
 					map[nodeRow][i] = token;  //Populate array
-					System.out.println("(" + nodeRow + "," + i + ") = " + map[nodeRow][i]); //For debugging purposes
+					// System.out.println("(" + nodeRow + "," + i + ") = " + map[nodeRow][i]);  //For debugging purposes
 				}
 				nodeRow++;						
 			}		
@@ -126,7 +127,7 @@ public class TextGame {
 					String token = tokenizer.nextToken();					
 					keyMap[nodeRow][i] = Integer.parseInt(token);  //Populate array					
 				}
-				System.out.println("Key for node " + keyMap[nodeRow][nodeKeyOpens] + " is in node " + keyMap[nodeRow][1]); //For debugging purposes
+				// System.out.println("Key for node " + keyMap[nodeRow][nodeKeyOpens] + " is in node " + keyMap[nodeRow][1]);  //For debugging purposes
 				nodeRow++;						
 			}		
 			k.close();
@@ -137,18 +138,24 @@ public class TextGame {
 		
 	}
 	
-	public void printStatus(){		
-		System.out.println(map[userLocation][descriptionNode] + " (" + userLocation + ", " + map[userLocation][4] +")");
-		System.out.println("The dog is in the " + map[monsterLocation][nameNode] + " (" + monsterLocation + ")");
+	public void printStatus(){
+		
+		// For normal game play
+		System.out.println(map[userLocation][descriptionNode]);  
+		System.out.println("The dog is in the " + map[monsterLocation][nameNode] + ".");  
+		
+		// For debugging purposes 
+		// System.out.println("*** Player:  (Node #" + userLocation + ", " + map[userLocation][4] + ")"); 
+		// System.out.println("*** Monster: (Node #" + monsterLocation + ", " + map[monsterLocation][nameNode] +")"); 
 	}
 	
 	public void printCommands() {
 		System.out.println();
 		System.out.println("Valid commands are:");
-		System.out.println("  n = North");
-		System.out.println("  s = South");
-		System.out.println("  e = East");
-		System.out.println("  w = West");
+		System.out.println("  n = Go North");
+		System.out.println("  s = Go South");
+		System.out.println("  e = Go East");
+		System.out.println("  w = Go West");
 		System.out.println("  l = Look Around");
 		System.out.println("  q = Quit Game");
 		System.out.println();
