@@ -24,6 +24,7 @@ For example, the following file begins with a header at row 0 and describes four
 ### KeyLocations file
 The KeyLocations file identifies which nodes contain keys. The syntax is:  
 `nodeKeyOpens, nodeKeyResides, isKeyAvailable (1/0),`  
+
 For example:  
 `21,19,1,`  
 This key opens the door at node #21 and the player finds the key in node #19. The final parameter, `isKeyAvailable` indicates whether the user has found the key. `1` indicates that the key is still on the map, and `0` indicates that the user has collected the key and it is no longer found on the map.
