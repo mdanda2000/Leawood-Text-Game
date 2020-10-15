@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 
-
-//TO DO: Add the logic to process keys, which is stubbed out below
+//TO DO: Clean up output text. Possibly hide the dog until its near?
 //TO DO: Research fight algorithms, integrate one into monster logic
 //TO DO: Create a main menu for starting, saving, and loading games
 
@@ -24,7 +23,7 @@ public class TextGame {
 	int userLocation;   		
 	int monsterLocation;
 	int monsterMovement; //The direction the monster wants to move, which may or may not be plausible
-	Random random = new Random();
+	Random random = new Random();  //Determines which direction the monster will move
 	boolean keepPlaying;	
 	
 	String[][] map = new String[99][6];
@@ -39,7 +38,13 @@ public class TextGame {
 	final int nameNode = 4;        //The text in map[userLocation][nameNode] contains the name of the node
 	final int descriptionNode = 5; //The text in map[userLocation][descriptonNode] contains the text description of the node
 	
-		
+	final int nodeKeyOpens = 0;   //The value in keyMap[i][nodeKeyOpens] identifies which door the key opens
+	final int nodeKeyResides = 1; //The value in keyMap[i][nodeKeyResides] identifies where the player can find the key
+	final int isKeyAvailable = 2; //Identifies whether the key is still on the map. If (keyMap[i][isKeyAvailable] == 1), the player has not found it yet
+	
+	final int mapFileTokensPerRow = 6;  //The expected number of parameters per row in the input map file. Works better than countTokens() 
+	
+	
 	public static void main(String[] args) {
 
 		TextGame leawood;
@@ -78,19 +83,15 @@ public class TextGame {
 			BufferedReader b = new BufferedReader(new FileReader(mapFile));
 			String readline = "";
 			
-			//int n=6; //number of parameters in each row, there's probably a way to use tokenizer to get it from readline 
-			
-			
 			int nodeRow=0; //node number, also the row number
 									
 			while ((readline=b.readLine())!= null){
 				//System.out.println(readline);  //For debugging purposes
 				StringTokenizer tokenizer = new StringTokenizer(readline, ",");				
 				
-				int n=tokenizer.countTokens();
-				System.out.println("int n=tokenizer.countTokens();  =  " + n);
+				// Using "mapFileTokensPerRow" instead of "tokenizer.countTokens()" reduces potential bugs from reading in map file
 				
-				for (int i=0; i<n ;i++){					
+				for (int i=0; i<mapFileTokensPerRow ;i++){					
 					String token = tokenizer.nextToken();					
 					map[nodeRow][i] = token;  //Populate array
 					System.out.println("(" + nodeRow + "," + i + ") = " + map[nodeRow][i]); //For debugging purposes
@@ -108,7 +109,7 @@ public class TextGame {
 		// Same as mapSetUp() except it identifies which nodes contain keys. 
 		
 		// Syntax of KeyLocations file:
-		// nodeKeyOpens, nodeKeyResides, isKeyAvailable (true/false),
+		// nodeKeyOpens, nodeKeyResides, isKeyAvailable (1/0),
 		
 		try{
 			File keyFile = new File ("C:\\Users\\Matt\\eclipse-workspace\\Matts Text Game\\src\\mattsTextGame\\LeawoodHouseKeyLocations.txt");
@@ -125,7 +126,7 @@ public class TextGame {
 					String token = tokenizer.nextToken();					
 					keyMap[nodeRow][i] = Integer.parseInt(token);  //Populate array					
 				}
-				System.out.println("Key for node " + keyMap[nodeRow][0] + " is in node " + keyMap[nodeRow][1]); //For debugging purposes
+				System.out.println("Key for node " + keyMap[nodeRow][nodeKeyOpens] + " is in node " + keyMap[nodeRow][1]); //For debugging purposes
 				nodeRow++;						
 			}		
 			k.close();
@@ -229,9 +230,7 @@ public class TextGame {
 				//System.out.println("Valid commands are: n,s,e,w,l,q");
 			}	
 			
-			checkForKey(userLocation); // Check if the new node location has any keys
-			
-			
+			checkForKey(userLocation); // Check if the new node location has any keys			
 			
 		}
 		
@@ -254,29 +253,23 @@ public class TextGame {
 	}
 	
 	public void checkForKey(int nodeNumber) {
-		// Check whether the node contains a key. Compare the nodeNumber with the values in keyMap[i][1]
-		
-	
-		//String nodeNumberString = Integer.toString(nodeNumber); 
-		
+		// Check whether the node contains a key. Compare the nodeNumber with the values in keyMap[i][nodeKeyResides]
+					
 		for (int i=0; i < keyMap.length; i++) {  //Check every row in the keyMap[][] array
-			if (nodeNumber == keyMap[i][1]) {
-				if (keyMap[i][2]==1) {
+			if (nodeNumber == keyMap[i][nodeKeyResides]) {
+				if (keyMap[i][isKeyAvailable]==1) {
 					//Add the key to the keysFound array
 					keysFound.add(keyMap[i][0]);   
 					
 					//Set the value in keyMap[i][2] to "0" to indicate that the key is no longer in the node
-					keyMap[i][2] = 0;
+					keyMap[i][isKeyAvailable] = 0;
 					
-					System.out.println("You found a key! " + keyMap[i][0]);
+					System.out.println("You found a key! " + keyMap[i][nodeKeyOpens]);
 				}
 								
 			}
 		}
 		
-		
-		//verify that the key does not already exist in keysFound list
-		// TO DO: Add key to keysFound, notify player
 		
 	}
 }
