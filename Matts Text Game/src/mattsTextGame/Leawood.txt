@@ -2,4 +2,4 @@
 00,03,02,00, NW,You are in the north-west corner.,
 00,04,00,01, NE,You are in the north-east corner.,
 01,00,04,00, SW,You are in the south-west corner.,
-02,00,00,03, SE,You are in the south-east corner.
+02,00,00,03, SE,You are in the south-east corner.,
