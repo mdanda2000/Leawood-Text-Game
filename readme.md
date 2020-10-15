@@ -8,12 +8,16 @@ This game requires two input files, one for the map and another for the key loca
 The Map file defines each node that the user can traverse. Each row in the text file defines a node. The node is identified by its row number. The syntax is:  
 `nodeToNorth,nodeToSouth,nodeToEast,nodeToWest,nodeName,nodeDescription,`  
 
-The first row is row 0, which is a header that the system ignores. For example, the following file begins with a header and describes four nodes:  
-`00,00,00,00, name, Description,`  
-`00,03,02,00, NW,You are in the north-west corner.,`  
-`00,04,00,01, NE,You are in the north-east corner.,`  
-`01,00,04,00, SW,You are in the south-west corner.,`  
-`02,00,00,03, SE,You are in the south-east corner.,`  
+If there is a wall or barrier, use `00` to indicate that the user cannot move that direction.  
+
+The first row in the file is row 0, which is a header that the system ignores.  
+
+For example, the following file begins with a header at row 0 and describes four nodes (1, 2, 3, and 4):  
+`00,00,00,00,nodeName,nodeDescription,`  
+`00,03,02,00,NW,You are in the north-west corner.,`  
+`00,04,00,01,NE,You are in the north-east corner.,`  
+`01,00,04,00,SW,You are in the south-west corner.,`  
+`02,00,00,03,SE,You are in the south-east corner.,`  
 
 
 ### KeyLocations file
