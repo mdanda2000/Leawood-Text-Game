@@ -1,2 +1,3 @@
 # Leawood Text Game
-This is a text-based game engine. It is written in Java and uses the console. The engine inputs the map from a text file, so you can create your own map. 
+This is a Java-based console application for creating text-based games.  
+It inputs the map from a text file.  
