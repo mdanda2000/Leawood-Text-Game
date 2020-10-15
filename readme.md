@@ -8,9 +8,10 @@ This game requires two input files, one for the map and another for the key loca
 The Map file defines each node that the user can traverse. Each row in the text file defines a node. The node is identified by its row number. The syntax is:  
 `nodeToNorth,nodeToSouth,nodeToEast,nodeToWest,nodeName,nodeDescription,`  
 
-If there is a wall or barrier, use `00` to indicate that the user cannot move that direction.  
-
-The first row in the file is row 0, which is a header that the system ignores.  
+Follow these rules:
+- To indicate a wall or barrier, use `00`. The player will not be able to move in that direction.  
+- To indicate that the node is a doorway (which requires a key), set the `nodeName` to `doorway`.
+- Include a header row at row 0. The system ignores row 0 and specifies node 1 at row 1.  
 
 For example, the following file begins with a header at row 0 and describes four nodes (1, 2, 3, and 4):  
 `00,00,00,00,nodeName,nodeDescription,`  
